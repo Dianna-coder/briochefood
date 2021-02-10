@@ -49,8 +49,9 @@ Below is what was used to create this project:
 3. update your .env with its 'PAGARME_CHAVE_API' and 'PAGARME_RECIPIENT_ID' values
 4. go to the source 'cd .\briochefood\src\'
 5. run 'pip install -r requirements.txt'
-6. run 'python manage.py runserver'
-7. Enjoy!
+6. run 'python manage.py migrate'
+7. run 'python manage.py runserver'
+8. Enjoy!
 
 ## Routes
 
@@ -62,18 +63,18 @@ We expect the input to be a json like this
 
 ```bash
 {
-  "name": "Bread Dinner",
-  "email": "bread.dinner@email.com",
-  "cpf": "00756475082",
-  "phone_number": "11985717689",
-  "birthday": "1999-01-01",
+  "name": "Pirate Customer 2",
+  "email": "pirate@customer.com",
+  "cpf": "44699109888",
+  "phone_number": "11938485966",
+  "birthday": "2001-02-02",
   "country": "BR",
   "state": "SP",
-  "city": "Guarulhos",
-  "neighborhood": "bread",
-  "street": "Avenue Bread",
-  "street_number": 2,
-  "zipcode": "078239485"
+  "city": "Taboao da Serra",
+  "neighborhood": "Av aaa",
+  "street": "Av aaaa",
+  "street_number": "10000",
+  "zipcode": 6787360
 }
 ```
 
