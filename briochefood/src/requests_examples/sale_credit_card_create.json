@@ -1,0 +1,66 @@
+{
+  "amount": "10000",
+  "payment_method": "credit_card",
+  "card_number": "4111111111111111",
+  "card_cvv": "123",
+  "card_expiration_date": "0922",
+  "card_holder_name": "Morpheus Fishburne",
+  "customer": {
+    "external_id": "2fefb2bf-7182-4346-b49c-7de349cbd9c6",
+    "name": "Arroz de teste",
+    "type": "individual",
+    "country": "br",
+    "email": "mopheus@nabucodonozor.com",
+    "documents": [
+      {
+        "type": "cpf",
+        "number": "30621143049"
+      }
+    ],
+    "phone_numbers": ["+5511999998888", "+5511888889999"],
+    "birthday": "1965-01-01"
+  },
+  "billing": {
+    "name": "Trinity Moss",
+    "address": {
+      "country": "br",
+      "state": "sp",
+      "city": "Cotia",
+      "neighborhood": "Rio Cotia",
+      "street": "Rua Matrix",
+      "street_number": "9999",
+      "zipcode": "06714360"
+    }
+  },
+  "shipping": {
+    "name": "Arroz de teste",
+    "fee": "1000",
+    "delivery_date": "2000-12-21",
+    "expedited": true,
+    "address": {
+      "country": "br",
+      "state": "sp",
+      "city": "Cotia",
+      "neighborhood": "Rio Cotia",
+      "street": "Rua Matrix",
+      "street_number": "9999",
+      "zipcode": "06714360"
+    }
+  },
+  "items": [
+    {
+      "id": "9dd2b3cf-9e1b-4927-9cd7-24aa85a61a83",
+      "title": "Red pill",
+      "unit_price": "10000",
+      "quantity": "1",
+      "tangible": true
+    },
+    {
+      "id": "1b989eb3-4ca1-4c9d-97e5-38058984679d",
+      "quantity": "1",
+      "title": "Blue pill",
+      "unit_price": "10000",
+      "tangible": true
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "name": "Bread Dinner",
+  "email": "bread.dinner@email.com",
+  "cpf": "00756475082",
+  "phone_number": "11985717689",
+  "birthday": "1999-01-01",
+  "country": "BR",
+  "state": "SP",
+  "city": "Guarulhos",
+  "neighborhood": "bread",
+  "street": "Avenue Bread",
+  "street_number": 2,
+  "zipcode": "078239485"
+}
