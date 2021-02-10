@@ -45,10 +45,10 @@ Below is what was used to create this project:
 ## Getting Started
 
 1. Get Python
-2. run 'pip install -r requirements.txt'
-3. register with paying for a test account at this link -> https://dashboard.pagar.me/#/login
-4. update your .env with its 'PAGARME_CHAVE_API' and 'PAGARME_RECIPIENT_ID' values
-5. go to the source 'cd .\briochefood\src\'
+2. register with paying for a test account at this link -> https://dashboard.pagar.me/#/login
+3. update your .env with its 'PAGARME_CHAVE_API' and 'PAGARME_RECIPIENT_ID' values
+4. go to the source 'cd .\briochefood\src\'
+5. run 'pip install -r requirements.txt'
 6. run 'python manage.py runserver'
 7. Enjoy!
 
