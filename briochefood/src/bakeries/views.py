@@ -25,50 +25,47 @@ class ProductView(generics.ListCreateAPIView):
 
 class RecipientAndBankCreateView(APIView):
     def post(self, request, bakery_cnpj):
+        serializer = RecipientAndBankSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
         try:
             bakery = Bakery.objects.get(cnpj=bakery_cnpj)
         except Bakery.DoesNotExist:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
 
-        serializer = RecipientAndBankSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-
         try:
-            Pagarme().create_bank_account(
-                serializer.validated_data["bank_account"])
+            Pagarme().create_bank_account(request.data["bank_account"])
 
-            recipient = Pagarme().create_recipient(serializer.validated_data)
+            recipient = Pagarme().create_recipient(request.data)
 
             bakery.update_recipient(recipient["id"])
 
-            return Response({'Recebedor e conta bancária criados!'}, status=status.HTTP_200_OK)
+            return Response({'Recebedor e conta bancária criados!'}, status=status.HTTP_201_CREATED)
         except Exception as error:
             return Response(error, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-# terminar os testes
-
 class SaleCreateView(APIView):
     def post(self, request, bakery_cnpj):
+        transaction_serializer = TransactionSerializer(data=request.data)
+        transaction_serializer.is_valid(raise_exception=True)
+
         try:
             bakery = Bakery.objects.get(cnpj=bakery_cnpj)
         except Bakery.DoesNotExist or not bakery.recipient:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
 
-        transaction_serializer = TransactionSerializer(data=request.data)
-        transaction_serializer.is_valid(raise_exception=True)
-
-        buy_data = request.data
-
         try:
+            buy_data = request.data
+
             for item in buy_data["items"]:
                 product = Product.objects.get(id=item["id"])
 
                 is_available = product.check_stock(item["quantity"])
                 if not is_available:
-                    return Response(status=status.HTTP_401_UNAUTHORIZED)
+                    return Response({f'O item {product.title} não está disponível para compra!'}, status=status.HTTP_401_UNAUTHORIZED)
 
-                product.update_quantity(quantity_to_buy)
+                product.update_quantity(item["quantity"])
 
             transaction = Pagarme().create_transaction(buy_data, bakery.recipient)
 
