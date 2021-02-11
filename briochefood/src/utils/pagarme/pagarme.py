@@ -1,5 +1,5 @@
 from django.conf import settings
-from .rules import *
+from .rules_pagarme import *
 
 import pagarme
 
