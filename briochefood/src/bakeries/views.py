@@ -2,15 +2,16 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import generics, status
 
-from bakeries.models import Bakery, Product, Sale
+from bakeries.models import Bakery, Product
 
 from bakeries.serializer import BakerySerializer, ProductSerializer
 from bakeries.validators.recipient_bank_validator import RecipientAndBankSerializer
 from bakeries.validators.transaction_validator import TransactionSerializer
 
-from utils.pagarme import Pagarme
-from customers.models import Customer
-from customers.serializer import CustomerSerializer
+from utils.pagarme.pagarme import Pagarme
+
+from bakeries.use_cases.create_recipient_and_bank_account import *
+from bakeries.use_cases.create_sale import *
 
 
 class BakeryView(generics.ListCreateAPIView):
@@ -34,11 +35,10 @@ class RecipientAndBankCreateView(APIView):
             return Response(status=status.HTTP_401_UNAUTHORIZED)
 
         try:
-            Pagarme().create_bank_account(request.data["bank_account"])
+            pagarme_provider = Pagarme()
 
-            recipient = Pagarme().create_recipient(request.data)
-
-            bakery.update_recipient(recipient["id"])
+            CreateRecipientAndBankAccountUseCase(
+                pagarme_provider).execute(request.data, bakery)
 
             return Response({'Recebedor e conta bancária criados!'}, status=status.HTTP_201_CREATED)
         except Exception as error:
@@ -67,18 +67,9 @@ class SaleCreateView(APIView):
 
                 product.update_quantity(item["quantity"])
 
-            transaction = Pagarme().create_transaction(buy_data, bakery.recipient)
+            pagarme_provider = Pagarme()
 
-            customer = Customer.objects.get(
-                id=buy_data["customer"]["external_id"])
-
-            sale = Sale(
-                transaction=transaction["id"],
-                bakery=bakery,
-                customer=customer
-            )
-
-            sale.save()
+            CreateSaleUseCase(pagarme_provider).execute(buy_data, bakery)
 
             return Response({'Compra realizada!'}, status=status.HTTP_200_OK)
         except Exception as error:
