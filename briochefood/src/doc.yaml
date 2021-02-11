@@ -1,0 +1,596 @@
+swagger: "2.0"
+info:
+  title: Brioche Food API
+  description: Brioche Food docs
+  termsOfService: https://www.google.com/policies/terms/
+  contact:
+    email: contact@snippets.local
+  license:
+    name: BSD License
+  version: v1
+host: 127.0.0.1:8000
+schemes:
+  - http
+basePath: /api
+consumes:
+  - application/json
+produces:
+  - application/json
+securityDefinitions:
+  Basic:
+    type: basic
+security:
+  - Basic: []
+paths:
+  /bakeries:
+    get:
+      operationId: bakeries_list
+      description: "Listar todas as padarias"
+      parameters: []
+      responses:
+        500:
+          description: "HTTP 500 INTERNAL SERVER ERROR"
+        200:
+          description: "200 OK"
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Bakery"
+      tags:
+        - bakeries
+    post:
+      operationId: bakeries_create
+      description: "Criar uma padaria"
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/Bakery"
+      responses:
+        500:
+          description: "HTTP 500 INTERNAL SERVER ERROR"
+        400:
+          description: "400 BAD REQUEST"
+          schema:
+            $ref: "#/definitions/400_ERROR"
+        201:
+          description: "201 created"
+          schema:
+            $ref: "#/definitions/Bakery"
+      tags:
+        - bakeries
+    parameters: []
+  /bakeries/products:
+    get:
+      operationId: bakeries_products_list
+      description: "Listar produtos das padarias"
+      parameters: []
+      responses:
+        500:
+          description: "HTTP 500 INTERNAL SERVER ERROR"
+        200:
+          description: ""
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Product"
+      tags:
+        - bakeries
+    post:
+      operationId: bakeries_products_create
+      description: "Criar produtos de padarias"
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/Product"
+      responses:
+        500:
+          description: "HTTP 500 INTERNAL SERVER ERROR"
+        400:
+          description: "400 BAD REQUEST"
+          schema:
+            $ref: "#/definitions/400_ERROR"
+        201:
+          description: "201 created"
+          schema:
+            $ref: "#/definitions/Product"
+      tags:
+        - bakeries
+    parameters: []
+  /bakeries/{bakery_cnpj}/recipient:
+    post:
+      operationId: bakeries_recipient_create
+      description: "Criar um recebedor e uma conta bancária para uma padaria"
+      parameters:
+        - name: "bakery_cnpj"
+          in: "path"
+          required: true
+          type: "string"
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/RecipientAndBank"
+      responses:
+        500:
+          description: "HTTP 500 INTERNAL SERVER ERROR"
+        401:
+          description: "401 UNAUTHORIZED"
+        400:
+          description: "400 BAD REQUEST"
+          schema:
+            $ref: "#/definitions/400_ERROR"
+        201:
+          description: "Recebedor e conta bancária criados!"
+      tags:
+        - bakeries
+    parameters:
+      - name: bakery_cnpj
+        in: path
+        required: true
+        type: string
+  /bakeries/{bakery_cnpj}/sales:
+    post:
+      operationId: bakeries_sales_create
+      description: "Criar uma venda de produto de uma padaria"
+      parameters:
+        - name: "bakery_cnpj"
+          in: "path"
+          required: true
+          type: "string"
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/Sales"
+      responses:
+        500:
+          description: "HTTP 500 INTERNAL SERVER ERROR"
+        401:
+          description: "401 UNAUTHORIZED"
+        400:
+          description: "400 BAD REQUEST"
+          schema:
+            $ref: "#/definitions/400_ERROR"
+        200:
+          description: "Compra realizada!"
+      tags:
+        - bakeries
+    parameters:
+      - name: bakery_cnpj
+        in: path
+        required: true
+        type: string
+  /customers:
+    get:
+      operationId: customers_list
+      description: "Listar clientes"
+      parameters: []
+      responses:
+        500:
+          description: "HTTP 500 INTERNAL SERVER ERROR"
+        200:
+          description: "200 OK"
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Customer"
+      tags:
+        - customers
+    post:
+      operationId: customers_create
+      description: "Criação de clientes"
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/Customer"
+      responses:
+        500:
+          description: "HTTP 500 INTERNAL SERVER ERROR"
+        400:
+          description: "400 BAD REQUEST"
+          schema:
+            $ref: "#/definitions/400_ERROR"
+        201:
+          description: "201 created"
+          schema:
+            $ref: "#/definitions/Customer"
+      tags:
+        - customers
+    parameters: []
+definitions:
+  Bakery:
+    required:
+      - cnpj
+      - name
+      - address
+    type: object
+    properties:
+      id:
+        title: Id
+        type: string
+        format: uuid
+        readOnly: true
+      cnpj:
+        title: Cnpj
+        type: string
+        maxLength: 14
+        minLength: 1
+      name:
+        title: Name
+        type: string
+        maxLength: 100
+        minLength: 1
+      address:
+        title: Address
+        type: string
+        maxLength: 100
+        minLength: 1
+      recipient:
+        title: Recipient
+        type: string
+        maxLength: 28
+        minLength: 1
+        x-nullable: true
+  Product:
+    required:
+      - title
+      - unit_price
+      - quantity
+      - bakery
+    type: object
+    properties:
+      id:
+        title: Id
+        type: string
+        format: uuid
+        readOnly: true
+      title:
+        title: Title
+        type: string
+        maxLength: 100
+        minLength: 1
+      unit_price:
+        title: Unit price
+        type: string
+        maxLength: 20
+        minLength: 1
+      quantity:
+        title: Quantity
+        type: integer
+      bakery:
+        title: Bakery
+        type: string
+        format: uuid
+  Customer:
+    required:
+      - name
+      - email
+      - cpf
+      - phone_number
+      - birthday
+      - country
+      - state
+      - city
+      - neighborhood
+      - street
+      - street_number
+      - zipcode
+    type: object
+    properties:
+      id:
+        title: Id
+        type: string
+        format: uuid
+        readOnly: true
+      name:
+        title: Name
+        type: string
+        maxLength: 100
+        minLength: 1
+      email:
+        title: Email
+        type: string
+        format: email
+        maxLength: 254
+        minLength: 1
+      cpf:
+        title: Cpf
+        type: string
+        maxLength: 11
+        minLength: 1
+      phone_number:
+        title: Phone number
+        type: string
+        maxLength: 20
+        minLength: 1
+      birthday:
+        title: Birthday
+        type: string
+        format: date
+      country:
+        title: Country
+        type: string
+        maxLength: 2
+        minLength: 1
+      state:
+        title: State
+        type: string
+        maxLength: 2
+        minLength: 1
+      city:
+        title: City
+        type: string
+        maxLength: 20
+        minLength: 1
+      neighborhood:
+        title: Neighborhood
+        type: string
+        maxLength: 100
+        minLength: 1
+      street:
+        title: Street
+        type: string
+        maxLength: 100
+        minLength: 1
+      street_number:
+        title: Street number
+        type: string
+        maxLength: 10
+        minLength: 1
+      zipcode:
+        title: Zipcode
+        type: integer
+  RecipientAndBank:
+    required:
+      - transfer_day
+      - transfer_interval
+      - bank_account
+    type: object
+    properties:
+      transfer_day:
+        title: transfer_day
+        type: number
+      transfer_interval:
+        title: transfer_interval
+        type: number
+      bank_account:
+        title: bank_account
+        type: object
+        properties:
+          agencia:
+            title: agencia
+            type: number
+          agencia_dv:
+            title: agencia_dv
+            type: number
+          bank_code:
+            title: bank_code
+            type: number
+          conta:
+            title: conta
+            type: number
+          conta_dv:
+            title: conta_dv
+            type: number
+          document_number:
+            title: document_number
+            type: number
+          legal_name:
+            title: legal_name
+            type: string
+            maxLength: 100
+  Sales:
+    required:
+      - amount
+      - payment_method
+      - customer
+      - shipping
+      - billing
+      - items
+    type: object
+    properties:
+      amount:
+        title: amount
+        type: number
+      payment_method:
+        title: payment_method
+        type: string
+        maxLength: 100
+      customer:
+        title: customer
+        type: object
+        properties:
+          external_id:
+            title: external_id
+            type: string
+          name:
+            title: name
+            type: string
+            maxLength: 100
+          type:
+            title: type
+            type: string
+            maxLength: 10
+          country:
+            title: country
+            type: string
+            maxLength: 2
+          email:
+            title: email
+            type: string
+            maxLength: 100
+          documents:
+            title: documents
+            type: array
+            items:
+              required:
+                - type
+                - number
+              type: object
+              properties:
+                type:
+                  title: type
+                  type: string
+                  maxLength: 10
+                number:
+                  title: number
+                  type: number
+          phone_numbers:
+            title: phone_numbers
+            type: array
+            items:
+              type: number
+          birthday:
+            title: birthday
+            type: string
+          agencia_dv:
+            title: agencia_dv
+            type: number
+          bank_code:
+            title: bank_code
+            type: number
+          conta:
+            title: conta
+            type: number
+          conta_dv:
+            title: conta_dv
+            type: number
+          agencia:
+            title: agencia
+            type: number
+          document_number:
+            title: document_number
+            type: number
+          legal_name:
+            title: legal_name
+            type: string
+            maxLength: 100
+      shipping:
+        title: shipping
+        type: object
+        properties:
+          name:
+            title: name
+            type: string
+            maxLength: 100
+          fee:
+            title: fee
+            type: number
+          delivery_date:
+            title: delivery_date
+            type: string
+          expedited:
+            title: expedited
+            type: boolean
+          address:
+            title: address
+            type: object
+            properties:
+              country:
+                title: country
+                type: string
+                maxLength: 10
+              state:
+                title: state
+                type: string
+                maxLength: 10
+              city:
+                title: city
+                type: string
+                maxLength: 10
+              neighborhood:
+                title: neighborhood
+                type: string
+                maxLength: 100
+              street:
+                title: street
+                type: string
+                maxLength: 10
+              street_number:
+                title: street_number
+                type: string
+                maxLength: 10
+              zipcode:
+                title: zipcode
+                type: number
+      billing:
+        title: billing
+        type: object
+        properties:
+          name:
+            title: name
+            type: string
+            maxLength: 100
+          address:
+            title: address
+            type: object
+            properties:
+              country:
+                title: country
+                type: string
+                maxLength: 10
+              state:
+                title: state
+                type: string
+                maxLength: 10
+              city:
+                title: city
+                type: string
+                maxLength: 10
+              neighborhood:
+                title: neighborhood
+                type: string
+                maxLength: 100
+              street:
+                title: street
+                type: string
+                maxLength: 10
+              street_number:
+                title: street_number
+                type: string
+                maxLength: 10
+              zipcode:
+                title: zipcode
+                type: number
+      items:
+        title: items
+        type: array
+        items:
+          required:
+            - id
+            - title
+            - unit_price
+            - tangible
+            - quantity
+          type: object
+          properties:
+            id:
+              title: id
+              type: string
+            title:
+              title: title
+              type: string
+              maxLength: 100
+            unit_price:
+              title: unit_price
+              type: number
+            tangible:
+              title: tangible
+              type: boolean
+            quantity:
+              title: quantity
+              type: number
+  400_ERROR:
+    type: object
+    properties:
+      name:
+        type: array
+        items:
+          type: string
+          description: field is required."
