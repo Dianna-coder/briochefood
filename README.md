@@ -7,6 +7,7 @@
   - [What has been implemented so far?](#what-has-been-implemented)
   - [Done With](#done-with)
 - [Getting Started](#getting-started)
+- [Flow](#flow)
 - [Routes](#routes)
 - [Run tests](#run-tests)
 - [File Structure](#file-structure)
@@ -30,6 +31,7 @@ We already:
 - [x] Integrate with the Pagarme payments API.
 - [x] Added split rule.
 - [x] Added integration tests to the current codebase.
+- [x] Document in Swagger.
 
 ### Done With
 
@@ -39,6 +41,7 @@ Below is what was used to create this project:
 - [Django] - For a clean and fast api development;
 - [Django Rest Framework] - Apis development kit that implements Django and makes our implementation even more elegant;
 - [Pagarme] - Payment intermediary that facilitates transactions carried out;
+- [Swagger] - API documentation tool
 
 <!-- GETTING STARTED -->
 
@@ -53,9 +56,19 @@ Below is what was used to create this project:
 7. run 'python manage.py runserver'
 8. Enjoy!
 
-## Routes
+## Flow
 
 The flow to be followed is as follows
+
+1. create customer
+2. create bakerie
+3. create product
+4. create recipient and bank account
+5. create sale
+
+## Routes
+
+We have the following routes below, but you can also check them on Swagger at this link 'https://app.swaggerhub.com/apis/Dianna-coder/BriocheFood/1.0.0'
 
 ### Creating a customer - POST /api/customers
 
