@@ -319,8 +319,9 @@ briochefood
 
 ### Second Level
 
-- In each module we have the migrations and models to create the SQL tables, we have their tests, serializers, routes and views with the implementation of the endpoints
-- In utilities I have the methods and rules related to Pagarme's api
+- In each module we have the migrations and models to create the SQL tables, we have their tests, serializers, routes and views with the implementation of the endpoints.
+- In utilities I have the methods and rules related to Pagarme's api.
+- I added use cases to separate part of the View logic and to help with tests that make external calls.
 
 ```bash
 briochefood
@@ -328,6 +329,7 @@ briochefood
 │    ├── bakeries/
 │    │   ├── migrations/
 │    │   ├── tests/
+│    │   ├── use_cases/
 │    │   ├── validators/
 │    │   ├── admin.py
 │    │   ├── apps.py
@@ -337,11 +339,11 @@ briochefood
 │    │   └── view.py
 │    ├── customers/
 │    │   ├── migrations/
+│    │   ├── tests/
 │    │   ├── admin.py
 │    │   ├── apps.py
 │    │   ├── models.py
 │    │   ├── serializer.py
-│    │   ├── tests.py
 │    │   ├── urls.py
 │    │   └── view.py
 │    ├── requests_examples/
@@ -351,8 +353,7 @@ briochefood
 │    │   ├── recipient_and_bank_create.json
 │    │   └── sale_create.json
 │    ├── utils/
-│    │   ├── pagarme.py
-│    │   └── rules.py
+│    │   └── pagarme/
 │    ├── manage.py
 │    ├── requirements.txt
 │    ├── urls.py
