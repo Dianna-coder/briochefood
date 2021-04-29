@@ -6,3 +6,8 @@ from customers.serializer import CustomerSerializer
 class CustomerView(generics.ListCreateAPIView):
     queryset = Customer.objects.all()
     serializer_class = CustomerSerializer
+
+#
+#
+#
+#
