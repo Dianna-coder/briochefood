@@ -7,4 +7,4 @@ class CustomerView(generics.ListCreateAPIView):
     queryset = Customer.objects.all()
     serializer_class = CustomerSerializer
 
-# adicionar outro comentario
+# adicionar outro comentario!
