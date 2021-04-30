@@ -8,6 +8,6 @@ class CustomerView(generics.ListCreateAPIView):
     serializer_class = CustomerSerializer
 
 #
-#
+# qqqqqq
 #
 #
